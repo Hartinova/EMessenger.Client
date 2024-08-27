@@ -48,9 +48,9 @@ namespace EMessenger.Client.Model
       Messages = new List<Message>();
       User apponent1 = new User(2, "Тимур");
       User apponent2 = new User(3, "Камилла");
-      Messages.Add(new Message(1, apponent1, DateTime.Now.ToString(), "Hello"));
-      Messages.Add(new Message(2, Messenger.CurrentUser, DateTime.Now.ToString(), ";)"));
-      Messages.Add(new Message(3, apponent2, DateTime.Now.ToString(), "Hi"));
+      Messages.Add(new Message(1, apponent1, DateTime.Now.ToString(), "Hello", false));
+      Messages.Add(new Message(2, Messenger.CurrentUser, DateTime.Now.ToString(), ";)",true));
+      Messages.Add(new Message(3, apponent2, DateTime.Now.ToString(), "Hi", false));
     }
 
     #endregion

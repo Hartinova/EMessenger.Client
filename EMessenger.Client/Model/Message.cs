@@ -27,6 +27,10 @@ namespace EMessenger.Client.Model
     /// </summary>
     public string Text { get;private set; }
 
+    public bool IsCurrentUserMessage { get; private set; }
+
+    public HorizontalAlignment Alignment { get { return IsCurrentUserMessage ? HorizontalAlignment.Right : HorizontalAlignment.Left; } }
+   
     /// <summary>
     /// Конструктор.
     /// </summary>
@@ -34,12 +38,13 @@ namespace EMessenger.Client.Model
     /// <param name="user">Пользователь.</param>
     /// <param name="time">Время записи.</param>
     /// <param name="text">Текст.</param>
-    public Message(int id, User user, string time, string text)
+    public Message(int id, User user, string time, string text, bool isCurrentUserMessage)
     {
       this.Id = id;
       this.User = user;
       this.Time = time;
       this.Text = text;
+      this.IsCurrentUserMessage = isCurrentUserMessage;
     }
   }
 }
