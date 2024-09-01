@@ -3,7 +3,7 @@
   /// <summary>
   /// Тип чата.
   /// </summary>
-  public enum TypeChat
+  public enum ChatType
   {
     /// <summary>
     /// Личный.
@@ -13,6 +13,11 @@
     /// <summary>
     /// Общий.
     /// </summary>
-    General
+    General,
+
+    /// <summary>
+    /// Групповой.
+    /// </summary>
+    Group
   }
 }

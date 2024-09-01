@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Windows.Media;
+
 
 namespace EMessenger.Client.Model
 {
@@ -7,6 +10,8 @@ namespace EMessenger.Client.Model
   /// </summary>
   public class Message
   {
+    #region Поля и свойства
+
     /// <summary>
     /// Идентификатор.
     /// </summary>
@@ -20,17 +25,67 @@ namespace EMessenger.Client.Model
     /// <summary>
     /// Время записи сообщения.
     /// </summary>
-    public string Time {  get; private set; }
+    public DateTime Time {  get; private set; }
+
+    public string TimeForView
+    {
+      get
+      {
+        return Time.ToString("dd.mm.yyyy hh:mm:ss");
+      }
+    }
 
     /// <summary>
     /// Текст.
     /// </summary>
     public string Text { get;private set; }
 
-    public bool IsCurrentUserMessage { get; private set; }
+    /// <summary>
+    /// признак, что автора сообщения - это текущий пользователь
+    /// </summary>
+    public bool IsMyMessage { get; private set; }
 
-    public HorizontalAlignment Alignment { get { return IsCurrentUserMessage ? HorizontalAlignment.Right : HorizontalAlignment.Left; } }
+    #endregion
+
+    #region Поля и свойства для элементов формы
+
+    /// <summary>
+    /// Привязка сообщения к краю.
+    /// </summary>
+    public HorizontalAlignment Alignment
+    { 
+      get 
+      { 
+        return IsMyMessage ? HorizontalAlignment.Right : HorizontalAlignment.Left; 
+      } 
+    }
+
+    /// <summary>
+    /// Цвет области с сообщением.
+    /// </summary>
+    public SolidColorBrush MessageColor
+    {
+      get 
+      { 
+        return IsMyMessage ? Brushes.Aqua : Brushes.White; 
+      }
+    }
+
+    /// <summary>
+    /// Видимость текста с ником.
+    /// </summary>
+    public Visibility NickNameVisible
+    {
+      get
+      {
+        return (IsMyMessage) ? Visibility.Collapsed : Visibility.Visible;
+      }
+    }
    
+    #endregion
+
+    #region Конструкторы
+
     /// <summary>
     /// Конструктор.
     /// </summary>
@@ -38,13 +93,15 @@ namespace EMessenger.Client.Model
     /// <param name="user">Пользователь.</param>
     /// <param name="time">Время записи.</param>
     /// <param name="text">Текст.</param>
-    public Message(int id, User user, string time, string text, bool isCurrentUserMessage)
+    public Message(int id, User user, DateTime time, string text, bool isMyMessage)
     {
       this.Id = id;
       this.User = user;
       this.Time = time;
       this.Text = text;
-      this.IsCurrentUserMessage = isCurrentUserMessage;
+      this.IsMyMessage = isMyMessage;
     }
+
+    #endregion
   }
 }

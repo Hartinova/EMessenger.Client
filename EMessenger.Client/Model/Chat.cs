@@ -1,19 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.Remoting.Messaging;
 using System.Windows.Documents;
 
 namespace EMessenger.Client.Model
 {
   /// <summary>
-  /// Чат.
+  /// Чат общий или групповой.
   /// </summary>
-  public class Chat
+  public class Chat : INotifyPropertyChanged
   {
     #region Поля и свойства
+
     /// <summary>
-    /// Идентификатор.
+    /// Идентификатор чата. 
     /// </summary>
-    public int Id { get; private set; }
+    public int? Id { get; protected set; }
 
     /// <summary>
     /// Наименование.
@@ -21,77 +26,128 @@ namespace EMessenger.Client.Model
     public string Name { get; private set; }
 
     /// <summary>
-    /// Тип чата.
+    /// Имя чата с указанием типа чата.
     /// </summary>
-    public TypeChat Type { get; private set; }
-
-    /// <summary>
-    /// Список пользователей чата.
-    /// </summary>
-    public List<User> Users { get; private set; }
+    public virtual string NameWithType
+    {
+      get
+      {
+        return Name;
+      }
+    }
 
     /// <summary>
     /// Список сообщений.
     /// </summary>
     public List<Message> Messages { get; private set; }
 
-    #endregion
 
-    #region Методы.
 
     /// <summary>
-    /// Метод получения сообщений чата.
-    /// !!!!!!!!!!!!!!!!!!!!!!!!нужно доработать, чтобы получать данные с сервера.
+    /// Выбранное сообщение.
     /// </summary>
-    public void GetMessages()
+    private Message selectedMessage;
+
+    /// <summary>
+    /// Выбранное сообщение.
+    /// </summary>
+    public Message SelectedMessage
     {
-      Messages = new List<Message>();
-      User apponent1 = new User(2, "Тимур");
-      User apponent2 = new User(3, "Камилла");
-      Messages.Add(new Message(1, apponent1, DateTime.Now.ToString(), "Hello", false));
-      Messages.Add(new Message(2, Messenger.CurrentUser, DateTime.Now.ToString(), ";)",true));
-      Messages.Add(new Message(3, apponent2, DateTime.Now.ToString(), "Hi", false));
+      get
+      {
+        return this.selectedMessage;
+      }
+
+      set
+      {
+        if (value != this.selectedMessage)
+        {
+          this.selectedMessage = value;
+          NotifyPropertyChanged("SelectedMessage");
+        }
+      }
     }
 
     #endregion
 
+    #region Базовая реализация INotifyPropertyChanged - необходима для автоматического обновления данных на форме (использование binding)
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    // This method is called by the Set accessor of each property.  
+    // The CallerMemberName attribute that is applied to the optional propertyName  
+    // parameter causes the property name of the caller to be substituted as an argument.  
+    private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+    {
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    #endregion
+
+    #region Методы
+
+    /// <summary>
+    /// Метод получения сообщений чата.
+    /// </summary>
+    /// <param name="currentUser">Текущий пользователь</param>
+    public void GetMessages(User currentUser)
+    {
+      if (this.Id == null)
+      {
+        Messages = null;
+      }
+      else
+      {
+        Messages = Queries.GetAllMessages(this.Id.Value, currentUser);
+        SelectedMessage = Messages?.LastOrDefault();
+      }
+
+      NotifyPropertyChanged("Messages");
+    }
+
+    /// <summary>
+    /// Добавить пользователя в чат.
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
+    public virtual bool AddAccount(User user)
+    {
+      if (Id != null)
+      {
+        return Queries.PostAccountInChat(this.Id.Value, user.Id);
+      }
+      else
+      {
+        return false;
+      }
+    }
+
+    /// <summary>
+    /// Записать сообщение.
+    /// </summary>
+    /// <param name="text"></param>
+    public virtual void SendMessage(string text, User currentUser)
+    {
+      if (Id != null && currentUser != null)
+      {
+        Queries.PostMessage(Id.Value, currentUser.Id, text);
+      }
+    }
+    #endregion
+
     #region Конструкторы
+
     /// <summary>
     /// Конструктор.
     /// </summary>
     /// <param name="id">Идентификатор чата.</param>
     /// <param name="name">Наименование чата.</param>
-    /// <param name="type">Тип чата.</param>
-    private Chat(int id, string name, TypeChat type)
+    public Chat(int? id, string name)
     {
-      this.Id = id;
+      this.Id= id;
       this.Name = name;
-      this.Type = type;
     }
 
-    /// <summary>
-    /// Конструктор для создания общего чата.
-    /// </summary>
-    /// <param name="id">Идентификатор чата.</param>
-    /// <param name="name">Наименование чата.</param>
-    /// <param name="users">Пользователи чата.</param>
-    public Chat(int id, string name, List<User> users) : this(id, name, TypeChat.General)
-    {
-      this.Users = users;
-    }
-
-    /// <summary>
-    /// Конструктор для создания личного чата.
-    /// </summary>
-    /// <param name="id">Идентификатор чата.</param>
-    /// <param name="currentUser">Текущий пользователь.</param>
-    /// <param name="appender">Аппонент.</param>
-    public Chat(int id, User currentUser, User appender) : this(id, appender.NickName, TypeChat.Private)
-    {
-      this.Users = new List<User>();
-      this.Users.Add(currentUser);
-      this.Users.Add(appender);
-    }
     #endregion
   }
 }

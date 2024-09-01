@@ -16,9 +16,22 @@
     /// </summary>
     public string NickName { get; set; }
 
+    /// <summary>
+    /// Роль пользователя.
+    /// </summary>
+    public Roles Role {  get; set; }
+
     #endregion
 
     #region Конструкторы
+
+    /// <summary>
+    /// Конструктор по умолчанию.
+    /// </summary>
+    public User() : this(0, "") 
+    { 
+      this.Role = Roles.None;
+    }
 
     /// <summary>
     /// Конструктор.
