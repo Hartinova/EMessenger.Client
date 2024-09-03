@@ -1,0 +1,37 @@
+﻿<Window x:Class="EMessenger.Client.RegistrationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EMessenger.Client"
+        mc:Ignorable="d"
+               Title="Регистрация" Height="450" Width="800" Background='LightSkyBlue' ResizeMode="CanMinimize">
+    <Grid>
+        <Label Content="Регистрация" HorizontalAlignment="Center" Margin="0,56,0,0" Foreground="Gold" VerticalAlignment="Top" FontFamily="Impact" FontSize="24"/>
+
+        <Label Content="Придумайте логин:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="211,144,0,0" FontFamily="Impact" RenderTransformOrigin="0.983,1.373"/>
+
+        <TextBox x:Name="UsernameTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="320,147,0,0" Width="200"
+                 KeyDown="UsernameTextBox_KeyDown"/>
+
+        <Label Content="Имя:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="282,118,0,0" FontFamily="Impact" RenderTransformOrigin="0.983,1.373"/>
+
+        <TextBox x:Name="nameTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="320,118,0,0" Width="200"
+                 KeyDown="nameTextBox_KeyDown"/>
+
+        <Label Content="Придумайте пароль:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,174,0,0" FontFamily="Impact"/>
+
+        <PasswordBox x:Name="PasswordBoxOne" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="320,177,0,0" Width="200"
+                    KeyDown="PasswordBoxOne_KeyDown" />
+
+        <Label Content="Повторите пароль:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="214,200,0,0" FontFamily="Impact"/>
+
+        <PasswordBox x:Name="PasswordBoxTwo" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="321,203,0,0" Width="200"
+                     KeyDown="PasswordBoxTwo_KeyDown"/>
+
+        <Button Content="Зарегистрироваться" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="321,236,0,0"  Background='Gold' Click="RegisrationButtonClick" FontFamily="Impact" Width="199"/>
+
+        <TextBlock x:Name="MessageTextBlock" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="315,272,0,0" Foreground="Red" FontFamily="Comic Sans MS"/>
+    </Grid>
+</Window>
+

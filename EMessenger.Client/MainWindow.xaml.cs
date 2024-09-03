@@ -40,29 +40,38 @@ namespace EMessenger.Client
 
     public MainWindow()
     {
+      AuthorizationWindow authorizationWindow = new AuthorizationWindow();
+      authorizationWindow.ShowDialog();
+
       InitializeComponent();
 
       #region тут необходимо вызвать форму для ввода логина пароля или захода без регистрации и вернуть сюда полученного пользователя
       //код внутри этого региона нужно перенести в форму регистрации
 
-      // var comm = Communication.GetInstance();
 
       //если вход с регистрацией
-      //  User currentUser = Registration.RegistrateUserAccount(new UserRegistrationDto("Камилла","login2","000000"));
+      //  User currentUser = Registration.RegistrateUserAccount(new UserRegistrationDto("ОЛег","login00","000000"));
 
       //авторизация
-      var currentUser = Registration.AuthorizateUser("login10", "000000");
+      //var currentUser = Registration.AuthorizateUser("login10", "000000");
 
       //если вход без авторизации
       // User currentUser = Registration.RegistrateUser(new UserDto("Гость2"));
 
       #endregion
+      if (Messenger.CurrentUser != null)
+      {
+        messenger = new Messenger();
+        this.DataContext = messenger;
 
-      messenger = new Messenger(currentUser);
-      this.DataContext = messenger;
-
-      //запуск по таймеру - обновление сообщений
-      timer = new Timer(TimerCallback, null, 0, interval);
+        //запуск по таймеру - обновление сообщений
+        timer = new Timer(TimerCallback, null, 0, interval);
+      }
+      else
+      {
+        MessageBox.Show("Не пройдена авторизация.");
+        this.Close();
+      }
 
     }
 
@@ -82,8 +91,14 @@ namespace EMessenger.Client
     /// <param name="o"></param>
     private void TimerCallback(Object o)
     {
-      messenger.SelectedChat.GetMessages(Messenger.CurrentUser);
-      dataGridMessage.ScrollIntoView(messenger.SelectedChat.SelectedMessage);
+      if (Messenger.CurrentUser != null)
+      {
+        messenger.SelectedChat?.GetMessages(Messenger.CurrentUser);
+        if (messenger.SelectedChat != null && messenger.SelectedChat.SelectedMessage != null)
+        {
+          dataGridMessage.ScrollIntoView(messenger.SelectedChat.SelectedMessage);
+        }
+      }
 
       GC.Collect();
     }
@@ -118,6 +133,11 @@ namespace EMessenger.Client
           messageControl.Text = "";
         }
       }
+    }
+
+    private void BtnRefreshChats_Click(object sender, RoutedEventArgs e)
+    {
+      messenger.GetChats(Messenger.CurrentUser, messenger.SelectedChat);
     }
   }
 }

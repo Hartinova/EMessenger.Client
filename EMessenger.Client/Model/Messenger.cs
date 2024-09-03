@@ -29,7 +29,7 @@ namespace EMessenger.Client.Model
     /// <summary>
     /// Текущий пользователь.
     /// </summary>
-    public static  User CurrentUser { get; private set; }
+    public static  User CurrentUser { get; set; }
 
     /// <summary>
     /// Список чатов, доступный пользователю.
@@ -111,7 +111,7 @@ namespace EMessenger.Client.Model
     /// Получение списка чатов текущего пользователя.
     /// </summary>
     /// <param name="currentUser">Текущий пользователь.</param>
-    private void GetChats(User currentUser)
+    public void GetChats(User currentUser, Chat lastChat=null)
     {
       Chats = new List<Chat>();
 
@@ -152,9 +152,19 @@ namespace EMessenger.Client.Model
         }
       }
 
+      NotifyPropertyChanged("Chats");
+
       if (Chats != null && Chats.Count() > 0)
       {
-        SelectedChat = Chats.First();
+        if (lastChat != null)
+        {
+          SelectedChat = Chats.Where(e => e.Id == lastChat.Id).FirstOrDefault();
+        }
+        
+        if(SelectedChat==null)
+        {
+          SelectedChat = Chats.First();
+        }
       }
     }
 
@@ -201,9 +211,8 @@ namespace EMessenger.Client.Model
 
     #region Конструктор
 
-    public Messenger(User user)
+    public Messenger()
     {
-      CurrentUser = user;
       GetChats(CurrentUser);
     }
 

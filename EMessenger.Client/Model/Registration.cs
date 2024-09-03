@@ -9,6 +9,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows;
 
 namespace EMessenger.Client.Model
 {
@@ -140,7 +141,7 @@ namespace EMessenger.Client.Model
         }
         else
         {
-          throw new Exception($"Ошибка {response.StatusCode}");
+          MessageBox.Show($"Ошибка {response.StatusCode}");
         }
       }
 
@@ -169,7 +170,7 @@ namespace EMessenger.Client.Model
       }
       else
       {
-        throw new Exception($"Ошибка при регистрации {statusCode}");
+         MessageBox.Show($"Ошибка при регистрации {statusCode}");
       }
      
       return user;
