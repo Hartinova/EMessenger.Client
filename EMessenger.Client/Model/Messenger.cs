@@ -11,7 +11,7 @@ namespace EMessenger.Client.Model
   /// <summary>
   /// Чат
   /// </summary>
-  public class Messenger:INotifyPropertyChanged
+  public class Messenger : INotifyPropertyChanged
   {
     #region Поля и свойства
 
@@ -173,12 +173,35 @@ namespace EMessenger.Client.Model
     }
 
     /// <summary>
-    /// Тут необходимо реализовать добавление общего чата, добавить входные параметры, которые необходимы
+    /// Добавить общий чат.
     /// </summary>
-    public void AddGeneralChat()
+    /// <param name="chatName">Имя нового общего чата.</param>
+    public void AddGeneralChat(string chatName)
     {
-      MessageBox.Show("Тут необходимо реализовать добавление общего чата");
-    }
+            // Проверяем, не существует ли уже чат с таким именем
+            if (Chats.Any(c => c.Name == chatName))
+            {
+                MessageBox.Show($"Чат с именем '{chatName}' уже существует.");
+                return;
+            }
+
+            // Вызываем метод PostChat из Queries.cs
+            int? newChatId = Queries.PostChat(ChatType.General, chatName);
+
+            if (newChatId.HasValue)
+            {
+                // Создаем новый чат, используя полученный идентификатор
+                GeneralChat newChat = new GeneralChat(newChatId.Value, chatName);
+
+                // Добавляем новый чат в список
+                Chats.Add(newChat);
+            }
+            else
+            {
+                // Обработка ошибки, если идентификатор чата не получен
+                MessageBox.Show("Ошибка при создании чата.");
+            }
+        }
 
     /// <summary>
     /// Тут необходимо реализовать добавление группового чата, добавить входные параметры, которые необходимы
