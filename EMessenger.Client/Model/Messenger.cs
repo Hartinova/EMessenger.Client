@@ -178,37 +178,59 @@ namespace EMessenger.Client.Model
     /// <param name="chatName">Имя нового общего чата.</param>
     public void AddGeneralChat(string chatName)
     {
-            // Проверяем, не существует ли уже чат с таким именем
-            if (Chats.Any(c => c.Name == chatName))
-            {
-                MessageBox.Show($"Чат с именем '{chatName}' уже существует.");
-                return;
-            }
+      // Проверяем, не существует ли уже чат с таким именем
+      if (Chats.Any(c => c.Name == chatName))
+      {
+          MessageBox.Show($"Чат с именем '{chatName}' уже существует.");
+          return;
+      }
 
-            // Вызываем метод PostChat из Queries.cs
-            int? newChatId = Queries.PostChat(ChatType.General, chatName);
+      // Вызываем метод PostChat из Queries.cs
+      int? newChatId = Queries.PostChat(ChatType.General, chatName);
 
-            if (newChatId.HasValue)
-            {
-                // Создаем новый чат, используя полученный идентификатор
-                GeneralChat newChat = new GeneralChat(newChatId.Value, chatName);
+      if (newChatId.HasValue)
+      {
+          // Создаем новый чат, используя полученный идентификатор
+          GeneralChat newChat = new GeneralChat(newChatId.Value, chatName);
 
-                // Добавляем новый чат в список
-                Chats.Add(newChat);
-            }
-            else
-            {
-                // Обработка ошибки, если идентификатор чата не получен
-                MessageBox.Show("Ошибка при создании чата.");
-            }
-        }
+          // Добавляем новый чат в список
+          Chats.Add(newChat);
+      }
+      else
+      {
+          // Обработка ошибки, если идентификатор чата не получен
+          MessageBox.Show("Ошибка при создании чата.");
+      }
+    }
 
     /// <summary>
     /// Тут необходимо реализовать добавление группового чата, добавить входные параметры, которые необходимы
     /// </summary>
     public void AddGroupChat()
     {
-      MessageBox.Show("Тут необходимо реализовать добавление группового чата");
+      // Проверяем, не существует ли уже чат с таким именем
+      if (Chats.Any(c => c.Name == chatName))
+      {
+        MessageBox.Show($"Чат с именем '{chatName}' уже существует.");
+        return;
+      }
+
+      // Вызываем метод PostChat из Queries.cs
+      int? newChatId = Queries.PostChat(ChatType.Group, chatName);
+
+      if (newChatId.HasValue)
+      {
+        // Создаем новый чат, используя полученный идентификатор
+        GroupChat newChat = new GroupChat(newChatId.Value, chatName);
+
+        // Добавляем новый чат в список
+        Chats.Add(newChat);
+      }
+      else
+      {
+        // Обработка ошибки, если идентификатор чата не получен
+        MessageBox.Show("Ошибка при создании чата.");
+      }
     }
 
     /// <summary>

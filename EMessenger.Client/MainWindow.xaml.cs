@@ -73,19 +73,19 @@ namespace EMessenger.Client
     /// <param name="e"></param>
     private void BtnAddGeneralChat_Click(object sender, RoutedEventArgs e)
     {
-            // Создаем экземпляр диалогового окна
-            EMessenger.Client.Views.AddGeneralChatDialog dialog = new EMessenger.Client.Views.AddGeneralChatDialog();
+      // Создаем экземпляр диалогового окна
+      EMessenger.Client.Views.AddGeneralChatDialog dialog = new EMessenger.Client.Views.AddGeneralChatDialog();
 
-            // Покажем диалоговое окно
-            if (dialog.ShowDialog() == true)
-            {
-                // Если пользователь ввел имя чата и нажал "ОК", 
-                // создаем новый общий чат
-                string chatName = dialog.ChatName;
+      // Покажем диалоговое окно
+      if (dialog.ShowDialog() == true)
+      {
+          // Если пользователь ввел имя чата и нажал "ОК", 
+          // создаем новый общий чат
+          string chatName = dialog.ChatName;
 
-                // Вызываем метод добавления общего чата в мессенджере
-                messenger.AddGeneralChat(chatName);
-            }
+          // Вызываем метод добавления общего чата в мессенджере
+          messenger.AddGeneralChat(chatName);
+      }
     }
 
     /// <summary>
@@ -99,11 +99,22 @@ namespace EMessenger.Client
 
       GC.Collect();
     }
-
-
+    
     private void BtnAddGroupChat_Click(object sender, RoutedEventArgs e)
     {
-      messenger.AddGroupChat();
+      // Создаем экземпляр диалогового окна
+      EMessenger.Client.Views.AddGroupChatDialog dialog = new EMessenger.Client.Views.AddGroupChatDialog();
+
+      // Покажем диалоговое окно
+      if (dialog.ShowDialog() == true)
+      {
+        // Если пользователь ввел имя чата и нажал "ОК", 
+        // создаем новый общий чат
+        string chatName = dialog.ChatName;
+
+        // Вызываем метод добавления общего чата в мессенджере
+        messenger.AddGeneralChat(chatName);
+      }
     }
 
     private void BtnDelChat_Click(object sender, RoutedEventArgs e)

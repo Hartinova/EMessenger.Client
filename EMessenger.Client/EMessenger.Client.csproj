@@ -112,6 +112,9 @@
     <Compile Include="Views\AddGeneralChatDialog.xaml.cs">
       <DependentUpon>AddGeneralChatDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\AddGroupChatDialog.xaml.cs">
+      <DependentUpon>AddGroupChatDialog.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -132,6 +135,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\AddGroupChatDialog.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Chat.cs" />
