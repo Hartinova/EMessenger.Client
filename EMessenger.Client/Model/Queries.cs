@@ -242,6 +242,35 @@ namespace EMessenger.Client.Model
 
     #endregion
 
+    #region Delete
+    /// <summary>
+    /// Удалить чат.
+    /// </summary>
+    /// <param name="idChat"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    public static bool DeleteChat(int idChat)
+    {
+      using (var client = new HttpClient())
+      {
+        string route = string.Format(Registration.GetPathServer() + Routes.RouteDeleteChat, idChat);
+
+        var response = client.DeleteAsync(route).Result;
+        if (response.IsSuccessStatusCode)
+        {
+          return true;
+        }
+        else
+        {
+          throw new Exception($"Ошибка при удалении чата {response.StatusCode}");
+        }
+      }
+    }
+
+    #endregion
+
+
+
     /// <summary>
     /// Общий метод отправки запросов  get (Получение данных с сервера).
     /// </summary>

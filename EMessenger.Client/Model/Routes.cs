@@ -32,6 +32,11 @@ namespace EMessenger.Client.Model
     public const string RouteGetUsers = "api/user/getallregistred";
 
     /// <summary>
+    /// Удалить чат.
+    /// </summary>
+    public const string RouteDeleteChat = "api/chat/delete/?chatid={0}";
+
+    /// <summary>
     /// Получить список общих чатов.
     /// </summary>
     public const string RouteGetGeneralChats = "api/chat/getgeneralchats";

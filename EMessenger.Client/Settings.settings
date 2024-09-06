@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="PathWebServer" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">https://localhost:7249/</Value>
+      <Value Profile="(Default)">http://localhost:7249/</Value>
     </Setting>
   </Settings>
 </SettingsFile>

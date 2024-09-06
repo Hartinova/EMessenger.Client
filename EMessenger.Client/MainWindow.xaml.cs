@@ -50,10 +50,10 @@ namespace EMessenger.Client
 
 
       //если вход с регистрацией
-      //  User currentUser = Registration.RegistrateUserAccount(new UserRegistrationDto("ОЛег","login00","000000"));
+      //User currentUser = Registration.RegistrateUserAccount(new UserRegistrationDto("ikee","pauk","000000"));
 
       //авторизация
-      //var currentUser = Registration.AuthorizateUser("login10", "000000");
+      //var currentUser = Registration.AuthorizateUser("pauk", "000000");
 
       //если вход без авторизации
       // User currentUser = Registration.RegistrateUser(new UserDto("Гость2"));
@@ -82,7 +82,19 @@ namespace EMessenger.Client
     /// <param name="e"></param>
     private void BtnAddGeneralChat_Click(object sender, RoutedEventArgs e)
     {
-      messenger.AddGeneralChat();
+    // Создаем экземпляр диалогового окна
+      EMessenger.Client.Views.AddGeneralChatDialog dialog = new EMessenger.Client.Views.AddGeneralChatDialog();
+
+    // Покажем диалоговое окно
+      if (dialog.ShowDialog() == true)
+      {
+        // Если пользователь ввел имя чата и нажал "ОК", 
+        // создаем новый общий чат
+        string chatName = dialog.ChatName;
+
+        // Вызываем метод добавления общего чата в мессенджере
+        messenger.AddGeneralChat(chatName);
+      }
     }
 
     /// <summary>
@@ -106,7 +118,20 @@ namespace EMessenger.Client
 
     private void BtnAddGroupChat_Click(object sender, RoutedEventArgs e)
     {
-      messenger.AddGroupChat();
+    // Создаем экземпляр диалогового окна
+      EMessenger.Client.Views.AddGroupChatDialog dialog = new EMessenger.Client.Views.AddGroupChatDialog();
+
+    // Покажем диалоговое окно
+      if (dialog.ShowDialog() == true)
+      {
+        // Если пользователь ввел имя чата и нажал "ОК", 
+        // создаем новый общий чат
+        string chatName = dialog.ChatName;
+
+        // Вызываем метод добавления группового чата в мессенджере
+        messenger.AddGroupChat(chatName);
+        //messenger.GetChats(Messenger.CurrentUser, messenger.SelectedChat);
+      }
     }
 
     private void BtnDelChat_Click(object sender, RoutedEventArgs e)

@@ -53,7 +53,7 @@ namespace EMessenger.Client.Model
 
       set
       {
-        if (value != this.selectedChat)
+        if (value != null && value != this.selectedChat)
         {
           this.selectedChat = value;
           this.selectedChat.GetMessages(CurrentUser);
@@ -183,27 +183,99 @@ namespace EMessenger.Client.Model
     }
 
     /// <summary>
-    /// Тут необходимо реализовать добавление общего чата, добавить входные параметры, которые необходимы
+    /// Добавить общий чат.
     /// </summary>
-    public void AddGeneralChat()
+    /// <param name="chatName">Имя нового общего чата.</param>
+    public void AddGeneralChat(string chatName)
     {
-      MessageBox.Show("Тут необходимо реализовать добавление общего чата");
+    // Проверяем, не существует ли уже чат с таким именем
+      if (Chats.Any(c => c.Name == chatName))
+      {
+        MessageBox.Show($"Чат с именем '{chatName}' уже существует.");
+        return;
+      }
+
+    // Вызываем метод PostChat из Queries.cs
+      int? newChatId = Queries.PostChat(ChatType.General, chatName);
+
+      if (newChatId.HasValue)
+      {
+        // Создаем новый чат, используя полученный идентификатор
+        GeneralChat newChat = new GeneralChat(newChatId.Value, chatName);
+        MessageBox.Show("Общий чат создан.");
+        // Добавляем новый чат в список
+        Chats.Add(newChat);
+      }
+      else
+      {
+        // Обработка ошибки, если идентификатор чата не получен
+        MessageBox.Show("Ошибка при создании чата.");
+      }
     }
 
     /// <summary>
-    /// Тут необходимо реализовать добавление группового чата, добавить входные параметры, которые необходимы
+    /// Добавить групповой чат.
     /// </summary>
-    public void AddGroupChat()
+    /// <param name="chatName">Имя чата.</param>
+    public void AddGroupChat(string chatName)
     {
-      MessageBox.Show("Тут необходимо реализовать добавление группового чата");
+    // Проверяем, не существует ли уже чат с таким именем
+      if (Chats.Any(c => c.Name == chatName))
+      {
+        MessageBox.Show($"Чат с именем '{chatName}' уже существует.");
+        return;
+      }
+
+    // Вызываем метод PostChat из Queries.cs
+      int? newChatId = Queries.PostChat(ChatType.Group, chatName);
+
+      if (newChatId.HasValue)
+      {
+        // Создаем новый чат, используя полученный идентификатор
+        GroupChat newChat = new GroupChat(newChatId.Value, chatName);
+        MessageBox.Show("Групповой чат создан.");
+        // Добавляем новый чат в список
+        Chats.Add(newChat);
+      }
+      else
+      {
+        // Обработка ошибки, если идентификатор чата не получен
+        MessageBox.Show("Ошибка при создании чата.");
+      }
     }
 
     /// <summary>
-    /// Тут необходимо реализовать удаление чата, добавить входные параметры, которые необходимы
+    /// Удалить чат.
     /// </summary>
     public void DeleteChat()
     {
-      MessageBox.Show("Тут необходимо реализовать удаление чата");
+      if (SelectedChat != null)
+      {
+        // Проверяем, есть ли у чата ID (т.е. он уже создан на сервере)
+        if (SelectedChat.Id != 0)
+        {
+            // Вызываем метод DeleteChat из Queries.cs
+          bool success = Queries.DeleteChat((int)SelectedChat.Id);
+
+          if (success)
+          {
+                // Удаляем чат из списка
+            Chats.Remove(SelectedChat);
+            MessageBox.Show("Чат удален.");
+            SelectedChat = Chats.FirstOrDefault();
+          }
+          else
+          {
+                // Обработка ошибки, если удаление не удалось
+            MessageBox.Show("Ошибка при удалении чата.");
+          }
+        }
+        else
+        {
+            // Удаляем чат из списка, если он еще не создан на сервере
+          Chats.Remove(SelectedChat);
+        }
+      }
     }
 
 
