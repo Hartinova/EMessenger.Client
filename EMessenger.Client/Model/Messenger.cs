@@ -257,6 +257,13 @@ namespace EMessenger.Client.Model
         return;
       }
 
+      var chars = Queries.GetGroupChats(userId);
+      if (chars.Select(x => x.Id).Contains((int)SelectedChat.Id))
+      {
+        MessageBox.Show($"Пользователь уже есть в этом чате.");
+        return;
+      }
+
       bool newChatId = Queries.PostAccountInChat((int)SelectedChat.Id, userId);
 
       if (newChatId)
