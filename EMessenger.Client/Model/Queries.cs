@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace EMessenger.Client.Model
 {
@@ -37,7 +38,7 @@ namespace EMessenger.Client.Model
       }
       else
       {
-        throw new Exception($"Ошибка {statusCode}");
+        MessageBox.Show($"Ошибка {statusCode}");
       }
 
       return result;
@@ -62,7 +63,7 @@ namespace EMessenger.Client.Model
       }
       else
       {
-        throw new Exception($"Ошибка {statusCode}");
+        MessageBox.Show($"Ошибка {statusCode}");
       }
 
       return result;
@@ -88,7 +89,7 @@ namespace EMessenger.Client.Model
       }
       else
       {
-        throw new Exception($"Ошибка {statusCode}");
+        MessageBox.Show($"Ошибка {statusCode}");
       }
 
       return result;
@@ -124,7 +125,7 @@ namespace EMessenger.Client.Model
       }
       else
       {
-        throw new Exception($"Ошибка {statusCode}");
+        MessageBox.Show($"Ошибка {statusCode}");
       }
 
       return null;
@@ -155,7 +156,8 @@ namespace EMessenger.Client.Model
       }
       else
       {
-        throw new Exception($"Ошибка {statusCode}");
+        return result;
+       // MessageBox.Show($"Ошибка {statusCode}");
       }
 
       return result;
@@ -170,7 +172,6 @@ namespace EMessenger.Client.Model
     /// </summary>
     /// <param name="type">Тип чата.</param>
     /// <param name="name">Наименование чата.</param>
-    /// <exception cref="Exception">Ошибка при записи чата.</exception>
     public static int? PostChat(ChatType type, string name)
     {
       using (var client = new HttpClient())
@@ -187,7 +188,8 @@ namespace EMessenger.Client.Model
         }
         else
         {
-          throw new Exception($"Ошибка при создании чата {response.StatusCode}");
+          MessageBox.Show($"Ошибка при создании чата {response.StatusCode}");
+          return 0;
         }
       }
     }
@@ -212,7 +214,8 @@ namespace EMessenger.Client.Model
         }
         else
         {
-          throw new Exception($"Ошибка при создании чата {response.StatusCode}");
+          MessageBox.Show($"Ошибка при создании аккаунта {response.StatusCode}");
+          return false;
         }
       }
     }
@@ -235,13 +238,40 @@ namespace EMessenger.Client.Model
         var response = client.PostAsJsonAsync<MessageDto>(route, message).Result;
         if (!response.IsSuccessStatusCode)
         {
-          throw new Exception($"Ошибка при записи сообщения {response.StatusCode}");
+          MessageBox.Show($"Ошибка при записи сообщения {response.StatusCode}");
         }
       }
     }
 
     #endregion
 
+    #region Delete
+    /// <summary>
+    /// Удалить чат.
+    /// </summary>
+    /// <param name="idChat"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    public static bool DeleteChat(int idChat)
+    {
+      using (var client = new HttpClient())
+      {
+        string route = string.Format(Registration.GetPathServer() + Routes.RouteDeleteChat, idChat);
+
+        var response = client.DeleteAsync(route).Result;
+        if (response.IsSuccessStatusCode)
+        {
+          return true;
+        }
+        else
+        {
+          MessageBox.Show($"Ошибка при удалении чата {response.StatusCode}");
+          return false;
+        }
+      }
+    }
+
+    #endregion
     /// <summary>
     /// Общий метод отправки запросов  get (Получение данных с сервера).
     /// </summary>

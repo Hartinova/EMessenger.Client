@@ -24,6 +24,7 @@ namespace EMessenger.Client
     public RegistrationWindow()
     {
       InitializeComponent();
+      nameTextBox.Focus();
     }
 
     private void RegisrationButtonClick(object sender, RoutedEventArgs e)

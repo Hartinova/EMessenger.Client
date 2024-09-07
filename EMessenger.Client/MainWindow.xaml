@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EMessenger.Client"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="450" Width="800">
+        Title="{Binding Title}" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,7 +18,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="350" />
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -32,7 +32,8 @@
                     <Button Content="Обновить"  Margin="5" Click="BtnRefreshChats_Click"/>
                     <Button Content="+ общий чат"  Margin="5" Click="BtnAddGeneralChat_Click"/>
                     <Button Content="+ групповой чат"  Margin="5" Click="BtnAddGroupChat_Click"/>
-                    <Button Content="Удалить чат"  Margin="5" Click="BtnDelChat_Click"/>
+                    <Button Content="Удалить чат"  Margin="5" Click="BtnDelChat_Click"
+                            IsEnabled="{Binding SelectedChat.DeleteChatEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
             </ToolBarPanel>
             <ListView Grid.Row="1" HorizontalAlignment="Stretch"

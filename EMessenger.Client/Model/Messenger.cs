@@ -11,7 +11,7 @@ namespace EMessenger.Client.Model
   /// <summary>
   /// Чат
   /// </summary>
-  public class Messenger:INotifyPropertyChanged
+  public class Messenger : INotifyPropertyChanged
   {
     #region Поля и свойства
 
@@ -29,7 +29,7 @@ namespace EMessenger.Client.Model
     /// <summary>
     /// Текущий пользователь.
     /// </summary>
-    public static  User CurrentUser { get; set; }
+    public static User CurrentUser { get; set; }
 
     /// <summary>
     /// Список чатов, доступный пользователю.
@@ -56,8 +56,9 @@ namespace EMessenger.Client.Model
         if (value != this.selectedChat)
         {
           this.selectedChat = value;
-          this.selectedChat.GetMessages(CurrentUser);
+          this.selectedChat?.GetMessages(CurrentUser);
           NotifyPropertyChanged("SelectedChat");
+          NotifyPropertyChanged("SelectedChat.DeleteChatEnabled");
         }
       }
     }
@@ -69,12 +70,12 @@ namespace EMessenger.Client.Model
     /// <summary>
     /// Видимость панели редактирования чатов.
     /// </summary>
-    public Visibility EditPanelVisible 
-    { 
-      get 
-      { 
-        return (CurrentUser==null || CurrentUser.Role==Roles.None) ? Visibility.Collapsed : Visibility.Visible; 
-      } 
+    public Visibility EditPanelVisible
+    {
+      get
+      {
+        return (CurrentUser == null || CurrentUser.Role == Roles.None) ? Visibility.Collapsed : Visibility.Visible;
+      }
     }
 
     /// <summary>
@@ -106,12 +107,12 @@ namespace EMessenger.Client.Model
 
     #region Методы
 
-   
+
     /// <summary>
     /// Получение списка чатов текущего пользователя.
     /// </summary>
     /// <param name="currentUser">Текущий пользователь.</param>
-    public void GetChats(User currentUser, Chat lastChat=null)
+    public void GetChats(User currentUser, Chat lastChat = null)
     {
       Chats = new List<Chat>();
 
@@ -124,8 +125,8 @@ namespace EMessenger.Client.Model
       var generalChats = Queries.GetGeneralChats();
       foreach (var chatDto in generalChats)
       {
-          GeneralChat chat = new GeneralChat(chatDto.Id, chatDto.Name);
-          Chats.Add(chat);
+        GeneralChat chat = new GeneralChat(chatDto.Id, chatDto.Name);
+        Chats.Add(chat);
       }
 
       //список пользователей и групповых чатов получаем только для зарегистрированного пользователя
@@ -146,7 +147,7 @@ namespace EMessenger.Client.Model
           if (user.Id != currentUser.Id)
           {
             var chatId = Queries.GetPrivateChat(currentUser.Id, user.Id);
-            PrivateChat chat = new PrivateChat(chatId, user.NickName, user);         
+            PrivateChat chat = new PrivateChat(chatId, user.NickName, user);
             Chats.Add(chat);
           }
         }
@@ -160,8 +161,8 @@ namespace EMessenger.Client.Model
         {
           SelectedChat = Chats.Where(e => e.Id == lastChat.Id).FirstOrDefault();
         }
-        
-        if(SelectedChat==null)
+
+        if (SelectedChat == null)
         {
           SelectedChat = Chats.First();
         }
@@ -174,8 +175,8 @@ namespace EMessenger.Client.Model
     /// <param name="message">Текст сообщения.</param>
     public void SendMessage(string message)
     {
-      if (SelectedChat==null)
-      { 
+      if (SelectedChat == null)
+      {
         return;
       }
 
@@ -183,28 +184,98 @@ namespace EMessenger.Client.Model
     }
 
     /// <summary>
-    /// Тут необходимо реализовать добавление общего чата, добавить входные параметры, которые необходимы
+    /// Добавить общий чат.
     /// </summary>
-    public void AddGeneralChat()
+    /// <param name="chatName">Имя нового общего чата.</param>
+    public void AddGeneralChat(string chatName)
     {
-      MessageBox.Show("Тут необходимо реализовать добавление общего чата");
+      // Проверяем, не существует ли уже чат с таким именем
+      if (Chats.Any(c => c.Name == chatName))
+      {
+        MessageBox.Show($"Чат с именем '{chatName}' уже существует.");
+        return;
+      }
+
+      // Вызываем метод PostChat из Queries.cs
+      int? newChatId = Queries.PostChat(ChatType.General, chatName);
+
+      if (newChatId.HasValue)
+      {
+        // Создаем новый чат, используя полученный идентификатор
+        GeneralChat newChat = new GeneralChat(newChatId.Value, chatName);
+
+        // обновим список
+        this.GetChats(CurrentUser);
+      }
+      else
+      {
+        // Обработка ошибки, если идентификатор чата не получен
+        MessageBox.Show("Ошибка при создании чата.");
+      }
     }
 
     /// <summary>
-    /// Тут необходимо реализовать добавление группового чата, добавить входные параметры, которые необходимы
+    /// Добавить групповой чат.
     /// </summary>
-    public void AddGroupChat()
+    /// <param name="chatName">Имя нового чата.</param>
+    public void AddGroupChat(string chatName)
     {
-      MessageBox.Show("Тут необходимо реализовать добавление группового чата");
+      // Проверяем, не существует ли уже чат с таким именем
+      if (Chats.Any(c => c.Name == chatName))
+      {
+        MessageBox.Show($"Чат с именем '{chatName}' уже существует.");
+        return;
+      }
+
+      // Вызываем метод PostChat из Queries.cs
+      int? newChatId = Queries.PostChat(ChatType.Group, chatName);
+
+      if (newChatId.HasValue)
+      {
+        // Создаем новый чат, используя полученный идентификатор
+        GroupChat newChat = new GroupChat(newChatId.Value, chatName);
+
+        newChat.AddAccount(CurrentUser);
+
+        // обновим список
+        this.GetChats(CurrentUser);
+      }
+      else
+      {
+        // Обработка ошибки, если идентификатор чата не получен
+        MessageBox.Show("Ошибка при создании чата.");
+      }
     }
 
+
     /// <summary>
-    /// Тут необходимо реализовать удаление чата, добавить входные параметры, которые необходимы
+    /// Удалить чат.
     /// </summary>
     public void DeleteChat()
     {
-      MessageBox.Show("Тут необходимо реализовать удаление чата");
+      if (SelectedChat != null)
+      {
+        // Проверяем, есть ли у чата ID (т.е. он уже создан на сервере)
+        if (SelectedChat.Id !=null && SelectedChat.Id != 0)
+        {
+          // Вызываем метод DeleteChat из Queries.cs
+          bool success = Queries.DeleteChat((int)SelectedChat.Id);
+
+          if (success)
+          {
+            MessageBox.Show("Чат удален.");
+            this.GetChats(CurrentUser);
+          }
+          else
+          {
+            // Обработка ошибки, если удаление не удалось
+            MessageBox.Show("Ошибка при удалении чата.");
+          }
+        }
+        
+      }
     }
+
 
 
     #endregion

@@ -24,6 +24,7 @@ namespace EMessenger.Client
     public AuthorizationWindow()
     {
       InitializeComponent();
+      UsernameTextBox.Focus();
     }
     private void AuthorizationButtonClick(object sender, RoutedEventArgs e)
     {

@@ -68,6 +68,17 @@ namespace EMessenger.Client.Model
       }
     }
 
+    /// <summary>
+    /// Доступность кнопки удаления чата.
+    /// </summary>
+    public bool DeleteChatEnabled
+    {
+      get
+      {
+        return (this.Id != null && this.Id != 0 );
+      }
+    }
+
     #endregion
 
     #region Базовая реализация INotifyPropertyChanged - необходима для автоматического обновления данных на форме (использование binding)
@@ -103,6 +114,7 @@ namespace EMessenger.Client.Model
       }
 
       NotifyPropertyChanged("Messages");
+      NotifyPropertyChanged("DeleteChatEnabled");
     }
 
     /// <summary>
@@ -131,6 +143,8 @@ namespace EMessenger.Client.Model
       if (Id != null && currentUser != null)
       {
         Queries.PostMessage(Id.Value, currentUser.Id, text);
+
+        NotifyPropertyChanged("DeleteChatEnabled");
       }
     }
     #endregion
