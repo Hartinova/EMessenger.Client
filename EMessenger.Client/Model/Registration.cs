@@ -153,13 +153,14 @@ namespace EMessenger.Client.Model
     /// </summary>
     private static User GetUserInfo(string login, string password)
     {
-      User user = new User();
+      User user = null;
       login = HttpUtility.UrlEncode(login);
       password = HttpUtility.UrlEncode(password);
 
       var res = Queries.SimpleGet(string.Format(Routes.RouteGetByLoginAndPassword, login,password), out HttpStatusCode statusCode);
       if (statusCode == HttpStatusCode.OK)
       {
+        user = new User();
         var userDto = Newtonsoft.Json.JsonConvert.DeserializeObject<UserAuthorizationDto>(res);
         if (userDto != null)
         {

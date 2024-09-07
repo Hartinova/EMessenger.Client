@@ -37,26 +37,25 @@ namespace EMessenger.Client
 
     Timer timer;
 
-
     public MainWindow()
     {
       AuthorizationWindow authorizationWindow = new AuthorizationWindow();
       authorizationWindow.ShowDialog();
-
+      
       InitializeComponent();
 
       #region тут необходимо вызвать форму для ввода логина пароля или захода без регистрации и вернуть сюда полученного пользователя
-      //код внутри этого региона нужно перенести в форму регистрации
+    //код внутри этого региона нужно перенести в форму регистрации
 
 
-      //если вход с регистрацией
-      //  User currentUser = Registration.RegistrateUserAccount(new UserRegistrationDto("ОЛег","login00","000000"));
+    //если вход с регистрацией
+    //  User currentUser = Registration.RegistrateUserAccount(new UserRegistrationDto("ОЛег","login00","000000"));
 
-      //авторизация
-      //var currentUser = Registration.AuthorizateUser("login10", "000000");
+    //авторизация
+    //var currentUser = Registration.AuthorizateUser("login10", "000000");
 
-      //если вход без авторизации
-      // User currentUser = Registration.RegistrateUser(new UserDto("Гость2"));
+    //если вход без авторизации
+    // User currentUser = Registration.RegistrateUser(new UserDto("Гость2"));
 
       #endregion
       if (Messenger.CurrentUser != null)
@@ -166,6 +165,23 @@ namespace EMessenger.Client
     private void BtnRefreshChats_Click(object sender, RoutedEventArgs e)
     {
       messenger.GetChats(Messenger.CurrentUser, messenger.SelectedChat);
+    }
+
+    private void BtnAddUserInChat_Click(object sender, RoutedEventArgs e)
+    {
+    // Создаем экземпляр диалогового окна
+      AddUserInChatWindow dialog = new AddUserInChatWindow();
+
+    // Покажем диалоговое окно
+      if (dialog.ShowDialog() == true)
+      {
+        // Если пользователь ввел имя чата и нажал "ОК", 
+        // создаем новый общий чат
+        int userId = dialog.UserId;
+
+        // Вызываем метод добавления общего чата в мессенджере
+        messenger.AddUserInGroupChat(userId);
+      }
     }
   }
 }

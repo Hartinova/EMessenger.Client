@@ -247,6 +247,31 @@ namespace EMessenger.Client.Model
       }
     }
 
+    
+    public void AddUserInGroupChat(int userId)
+    {
+      var users = Queries.GetUsers();
+      if (!users.Select(x => x.Id).Contains(userId))
+      {
+        MessageBox.Show($"Пользователя с таким идентификатором нет.");
+        return;
+      }
+
+      bool newChatId = Queries.PostAccountInChat((int)SelectedChat.Id, userId);
+
+      if (newChatId)
+      {
+        MessageBox.Show($"Пользователь добавлен в чат {SelectedChat.Name}.");
+        // обновим список
+        this.GetChats(CurrentUser);
+      }
+      else
+      {
+        // Обработка ошибки
+        MessageBox.Show("Ошибка при при добавлении пользователя в чат.");
+      }
+    }
+
 
     /// <summary>
     /// Удалить чат.
@@ -275,8 +300,6 @@ namespace EMessenger.Client.Model
         
       }
     }
-
-
 
     #endregion
 
