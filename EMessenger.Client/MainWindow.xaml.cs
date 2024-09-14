@@ -167,5 +167,22 @@ namespace EMessenger.Client
     {
       messenger.GetChats(Messenger.CurrentUser, messenger.SelectedChat);
     }
+
+    private void BtnAddUserInChat_Click(object sender, RoutedEventArgs e)
+    {
+      // Создаем экземпляр диалогового окна
+      AddUserInChatWindow dialog = new AddUserInChatWindow(messenger);
+
+      // Покажем диалоговое окно
+      if (dialog.ShowDialog() == true)
+      {
+        // Если пользователь ввел имя чата и нажал "ОК", 
+        // создаем новый общий чат
+       // int userId = dialog.UserId;
+
+        // Вызываем метод добавления общего чата в мессенджере
+       // messenger.AddUserInGroupChat(userId);
+      }
+    }
   }
 }

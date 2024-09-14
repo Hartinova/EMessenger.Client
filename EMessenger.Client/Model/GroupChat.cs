@@ -29,6 +29,17 @@ namespace EMessenger.Client.Model
     /// </summary>
     public List<User> Users { get; private set; }
 
+    /// <summary>
+    /// Доступность кнопки добавления пользователя в чат.
+    /// </summary>
+    public override bool AddUserInChatEnabled
+    {
+      get
+      {
+        return true;
+      }
+    }
+
     #endregion
 
     #region Конструктор

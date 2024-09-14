@@ -92,6 +92,9 @@
     </ApplicationDefinition>
     <Compile Include="AddGeneralChatDialog.xaml.cs" />
     <Compile Include="AddGroupChatDialog.xaml.cs" />
+    <Compile Include="AddUserInChatWindow.xaml.cs">
+      <DependentUpon>AddUserInChatWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AuthorizationWindow.xaml.cs">
       <DependentUpon>AuthorizationWindow.xaml</DependentUpon>
     </Compile>
@@ -124,6 +127,10 @@
     <Page Include="AddGroupChatDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="AddUserInChatWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="AuthorizationWindow.xaml">
       <SubType>Designer</SubType>

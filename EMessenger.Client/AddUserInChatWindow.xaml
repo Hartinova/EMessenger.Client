@@ -1,0 +1,32 @@
+﻿<Window x:Class="EMessenger.Client.AddUserInChatWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EMessenger.Client"
+        mc:Ignorable="d"
+               Title="Добавление пользователя в чат" 
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="0" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="100" />
+        </Grid.ColumnDefinitions>
+
+        <Label Content="Id пользователя:" Grid.Row="0" Grid.Column="0" />
+        <ComboBox x:Name="UserIdTextBox" ItemsSource="{Binding Users}" Margin="5" 
+                 SelectedValue="{Binding SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 DisplayMemberPath="NickName"
+                 Grid.Row="0" Grid.Column="1"
+                 KeyDown="UserIdTextBox_KeyDown" />
+
+        <Button Content="ОК" Grid.Row="1" Grid.Column="0" Click="OkButton_Click" />
+        <Button Content="Отмена" Grid.Row="1" Grid.Column="1" Click="CancelButton_Click" />
+    </Grid>
+</Window>

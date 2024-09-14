@@ -35,6 +35,10 @@
                     <Button Content="Удалить чат"  Margin="5" Click="BtnDelChat_Click"
                             IsEnabled="{Binding SelectedChat.DeleteChatEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
+                <StackPanel>
+                    <Button Content="+ пользователь"  Margin="5,0,250,0" Click="BtnAddUserInChat_Click"
+                            IsEnabled="{Binding SelectedChat.AddUserInChatEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
             </ToolBarPanel>
             <ListView Grid.Row="1" HorizontalAlignment="Stretch"
                       ItemsSource="{Binding Chats}" 

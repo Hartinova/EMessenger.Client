@@ -79,6 +79,17 @@ namespace EMessenger.Client.Model
       }
     }
 
+    /// <summary>
+    /// Доступность кнопки добавления пользователя в чат.
+    /// </summary>
+    public virtual bool AddUserInChatEnabled
+    {
+      get
+      {
+        return false;
+      }
+    }
+
     #endregion
 
     #region Базовая реализация INotifyPropertyChanged - необходима для автоматического обновления данных на форме (использование binding)
@@ -115,6 +126,7 @@ namespace EMessenger.Client.Model
 
       NotifyPropertyChanged("Messages");
       NotifyPropertyChanged("DeleteChatEnabled");
+      NotifyPropertyChanged("AddUserInChatEnabled");
     }
 
     /// <summary>
@@ -145,6 +157,7 @@ namespace EMessenger.Client.Model
         Queries.PostMessage(Id.Value, currentUser.Id, text);
 
         NotifyPropertyChanged("DeleteChatEnabled");
+        NotifyPropertyChanged("AddUserInChatEnabled");
       }
     }
     #endregion

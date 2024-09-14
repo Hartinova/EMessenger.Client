@@ -32,6 +32,34 @@ namespace EMessenger.Client.Model
     public static User CurrentUser { get; set; }
 
     /// <summary>
+    /// Список всех пользователей чата.
+    /// </summary>
+    public static List<User> Users { get; set; }
+
+    private User selectedUser;
+
+    /// <summary>
+    /// Выбранный пользователь.
+    /// </summary>
+    public User SelectedUser
+    {
+      get
+      {
+        return this.selectedUser;
+      }
+
+      set
+      {
+        if (value != this.selectedUser)
+        {
+          this.selectedUser = value;
+
+          NotifyPropertyChanged("SelectedUser");
+        }
+      }
+    }
+
+    /// <summary>
     /// Список чатов, доступный пользователю.
     /// </summary>
     public List<Chat> Chats { get; set; }
@@ -248,6 +276,38 @@ namespace EMessenger.Client.Model
     }
 
 
+    public void AddUserInGroupChat(User user)
+    {
+
+      if (!Users.Select(x => x.Id).Contains(user.Id))
+      {
+        MessageBox.Show($"Пользователя с таким идентификатором нет.");
+        return;
+      }
+
+      var chars = Queries.GetGroupChats(user.Id);
+      if (chars!=null && chars.Count()>0 && chars.Select(x => x.Id).Contains((int)SelectedChat.Id))
+      {
+        MessageBox.Show($"Пользователь уже есть в этом чате.");
+        return;
+      }
+
+      bool result = Queries.PostAccountInChat((int)SelectedChat.Id, user.Id);
+
+      if (result)
+      {
+        MessageBox.Show($"Пользователь добавлен в чат {SelectedChat.Name}.");
+        // обновим список
+        this.GetChats(CurrentUser);
+      }
+      else
+      {
+        // Обработка ошибки
+        MessageBox.Show("Ошибка при при добавлении пользователя в чат.");
+      }
+    }
+
+
     /// <summary>
     /// Удалить чат.
     /// </summary>
@@ -256,7 +316,7 @@ namespace EMessenger.Client.Model
       if (SelectedChat != null)
       {
         // Проверяем, есть ли у чата ID (т.е. он уже создан на сервере)
-        if (SelectedChat.Id !=null && SelectedChat.Id != 0)
+        if (SelectedChat.Id != null && SelectedChat.Id != 0)
         {
           // Вызываем метод DeleteChat из Queries.cs
           bool success = Queries.DeleteChat((int)SelectedChat.Id);
@@ -272,7 +332,7 @@ namespace EMessenger.Client.Model
             MessageBox.Show("Ошибка при удалении чата.");
           }
         }
-        
+
       }
     }
 
@@ -285,6 +345,8 @@ namespace EMessenger.Client.Model
     public Messenger()
     {
       GetChats(CurrentUser);
+      Users = Queries.GetUsers()?.Where(e => e.Id != CurrentUser.Id).ToList();
+      SelectedUser = Users?.FirstOrDefault();
     }
 
     #endregion

@@ -25,7 +25,7 @@ namespace EMessenger.Client {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://localhost:7249/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://localhost:5020/")]
         public string PathWebServer {
             get {
                 return ((string)(this["PathWebServer"]));
