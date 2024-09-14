@@ -34,16 +34,20 @@
                     <Button Content="+ групповой чат"  Margin="5" Click="BtnAddGroupChat_Click"/>
                     <Button Content="Удалить чат"  Margin="5" Click="BtnDelChat_Click"
                             IsEnabled="{Binding SelectedChat.DeleteChatEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    
+                </StackPanel>
+                <StackPanel>
+                    <Button Content="+ пользователь"  Margin="5,0,250,0" Click="BtnAddUserInChat_Click"/>
                 </StackPanel>
                 <StackPanel>
                     <Button Content="+ пользователь"  Margin="5,0,250,0" Click="BtnAddUserInChat_Click"
                             IsEnabled="{Binding SelectedChat.AddUserInChatEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
             </ToolBarPanel>
-            <ListView Grid.Row="1" HorizontalAlignment="Stretch"
+            <ListView Grid.Row="1"
                       ItemsSource="{Binding Chats}" 
                       SelectedItem="{Binding SelectedChat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      DisplayMemberPath="NameWithType" />
+                      DisplayMemberPath="NameWithType" Height="374" VerticalAlignment="Top" Margin="0,5,0,0" />
         </Grid>
 
         <Grid Grid.Column="2" Visibility="{Binding MessagesPanelVisible}">
@@ -94,7 +98,7 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-          
+
             <TextBox x:Name="messageControl" Grid.Row="1" Margin="5" KeyDown="messageControl_KeyDown"/>
             <Button Content="Отправить" Grid.Row="1" Grid.Column="1" Margin="5" Click="BtnSendMessage_Click"/>
         </Grid>
